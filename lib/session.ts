@@ -1,13 +1,20 @@
 import { getServerSession } from "next-auth/next";
 import { NextAuthOptions, User } from "next-auth";
 // import { AdapterUser } from "next-auth/adapters";
-import { DefaultUser } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import jsonwebtoken from 'jsonwebtoken'
 import { JWT } from "next-auth/jwt";
 
 import { createUser, getUser } from "./actions";
 import { SessionInterface, UserProfile } from "@/common.types";
+
+export type AdapterUser = {
+  id: string;
+  name: string;
+  email: string;
+  image: string;
+  // Add other user fields you want to store
+};
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -60,7 +67,7 @@ export const authOptions: NextAuthOptions = {
       }
     },
     async signIn({ user }: {
-      user: DefaultUser | User
+      user: AdapterUser | User
     }) {
       try {
         const userExists = await getUser(user?.email as string) as { user?: UserProfile }
