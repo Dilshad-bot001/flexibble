@@ -30,6 +30,13 @@ export const dynamicParams = true;
 export const revalidate = 0;
 
 const Home = async ({ searchParams: { category, endcursor } }: Props) => {
+
+   // Check if the category is not provided or is not a string
+  if (typeof category !== "string") {
+    // Set category to null to indicate that all projects should be fetched
+    category = null;
+  }
+
   const data = await fetchAllProjects(category, endcursor) as ProjectSearch
 
   const projectsToDisplay = data?.projectSearch?.edges || [];
